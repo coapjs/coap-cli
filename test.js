@@ -56,4 +56,23 @@ describe('coap', function() {
       res.end('hello matteo')
     })
   })
+
+  it('should print help if no url', function(done) {
+    call().stdout.pipe(concat(function(data) {
+      expect(data.toString()).to.match(/Usage/)
+      done()
+    }))
+  })
+
+  it('should should not emit a new line if the response was a 4.04', function(done) {
+    call('coap://localhost').stdout.pipe(concat(function(data) {
+      expect(data).to.equal(undefined)
+      done()
+    }))
+
+    server.once('request', function(req, res) {
+      res.statusCode = 404
+      res.end()
+    })
+  })
 })
