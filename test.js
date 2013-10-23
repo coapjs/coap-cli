@@ -75,4 +75,43 @@ describe('coap', function() {
       res.end()
     })
   })
+
+  it('should GET a given resource by specifying the verb', function(done) {
+    call('get', 'coap://localhost').stdout.pipe(concat(function(data) {
+      expect(data.toString()).to.eql('hello world\n')
+      done()
+    }))
+
+    server.once('request', function(req, res) {
+      res.end('hello world')
+    })
+  })
+
+  ;['PUT', 'POST'].forEach(function(method) {
+    it('should ' + method + ' a given resource', function(done) {
+      call(method.toLowerCase(), 'coap://localhost').stdin.end('hello world')
+
+      server.once('request', function(req, res) {
+        res.end('')
+
+        expect(req.method).to.eql(method)
+
+        req.pipe(concat(function(data) {
+          expect(data.toString()).to.eql('hello world')
+          done()
+        }))
+      })
+    })
+  })
+
+  it('should DELETE a given resource', function(done) {
+    call('delete', 'coap://localhost')
+
+    server.once('request', function(req, res) {
+      res.end('deleted')
+
+      expect(req.method).to.eql('DELETE')
+      done()
+    })
+  })
 })
