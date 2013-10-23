@@ -14,6 +14,14 @@ What is CoAP?
 intended to be used in very simple electronics devices that allows them
 to communicate interactively over the Internet. -  Wikipedia
 
+Install
+----------------------------
+
+Install [node.js](http://nodejs.org), and then from a terminal:
+```
+npm install coap-cli -g
+```
+
 Usage
 ----------------------------
 
