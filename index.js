@@ -31,6 +31,11 @@ if (!program.args[0]) {
 url = URL.parse(program.args[0])
 url.method = method
 
+if (url.protocol !== 'coap:' || !url.hostname) {
+  console.log('Wrong URL')
+  process.exit(-1)
+}
+
 req = request(url).on('response', function(res) {
   res.pipe(process.stdout)
 

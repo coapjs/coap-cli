@@ -24,6 +24,13 @@ describe('coap', function() {
     return child
   }
 
+  it('should error with a wrong URL', function(done) {
+    call('abcde').stdout.pipe(concat(function(data) {
+      expect(data.toString()).to.eql('Wrong URL\n')
+      done()
+    }))
+  })
+
   it('should GET a given resource by default', function(done) {
     call('coap://localhost').stdout.pipe(concat(function(data) {
       expect(data.toString()).to.eql('hello world\n')
