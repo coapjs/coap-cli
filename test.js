@@ -102,6 +102,21 @@ describe('coap', function() {
         }))
       })
     })
+
+    it('should ' + method + ' a given resource from an option', function(done) {
+      call(method.toLowerCase(), '-p', 'hello world', 'coap://localhost')
+
+      server.once('request', function(req, res) {
+        res.end('')
+
+        expect(req.method).to.eql(method)
+
+        req.pipe(concat(function(data) {
+          expect(data.toString()).to.eql('hello world')
+          done()
+        }))
+      })
+    })
   })
 
   it('should DELETE a given resource', function(done) {

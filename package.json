@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha --bail --reporter spec --check-leaks"
   },
+  "pre-commint": [
+    "test"
+  ],
   "bin": {
     "coap": "index.js"
   },

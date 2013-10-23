@@ -4,13 +4,13 @@ var program = require('commander')
   , version = require('./package').version
   , request = require('coap').request
   , URL     = require('url')
-  , url
   , method  = 'GET' // default
-  , req
+  , url
 
 program
   .version(version)
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
+  .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .usage('[command] [options] url')
 
 
@@ -40,7 +40,9 @@ req = request(url).on('response', function(res) {
     })
 })
 
-if (method === 'GET' || method === 'DELETE')
-  req.end()
-else
-  process.stdin.pipe(req)
+if (method === 'GET' || method === 'DELETE' || program.payload) {
+  req.end(program.payload)
+  return
+}
+
+process.stdin.pipe(req)

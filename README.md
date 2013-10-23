@@ -26,14 +26,33 @@ Usage
 ----------------------------
 
 ```
-  Usage: coap [options] url
+  Usage: coap [command] [options] url
+
+  Commands:
+
+    get                    performs a GET request
+    put                    performs a PUT request
+    post                   performs a POST request
+    delete                 performs a DELETE request
 
   Options:
 
-    -h, --help         output usage information
-    -V, --version      output the version number
-    -n, --no-new-line  No new line at the end of the stream
+    -h, --help               output usage information
+    -V, --version            output the version number
+    -n, --no-new-line        No new line at the end of the stream
+    -p, --payload <payload>  The payload for POST and PUT requests
 ```
+
+### PUT and POST
+
+__PUT__ and __POST__ requests body are sent from the standard
+input by default. E.g.
+```
+echo 'hello world' | coap post coap://localhost/message
+```
+
+If you want to type it you can end the standard input by pressing
+CTRL-D.
 
 License
 ----------------------------
