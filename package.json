@@ -1,0 +1,37 @@
+{
+  "name": "coap-cli",
+  "version": "0.0.0",
+  "description": "A CLI for CoAP",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --bail --reporter spec --check-leaks"
+  },
+  "bin": {
+    "coap": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcollina/coap-cli.git"
+  },
+  "keywords": [
+    "coap",
+    "udp",
+    "m2m",
+    "iot",
+    "internet",
+    "of",
+    "things"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "pre-commit": "0.0.4",
+    "chai": "~1.8.0",
+    "mocha": "~1.13.0",
+    "concat-stream": "~1.0.1"
+  },
+  "dependencies": {
+    "coap": "~0.4.6",
+    "commander": "~2.0.0"
+  }
+}
