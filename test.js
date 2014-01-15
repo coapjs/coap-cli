@@ -180,4 +180,16 @@ describe('coap', function() {
       }, 10)
     })
   })
+
+  it('should support a 4.04 for an observe', function(done) {
+    call('-o', 'coap://localhost').stdout.pipe(concat(function(data) {
+      expect(data).to.equal(undefined)
+      done()
+    }))
+
+    server.once('request', function(req, res) {
+      res.statusCode = 404
+      res.end()
+    })
+  })
 })

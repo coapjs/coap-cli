@@ -40,27 +40,19 @@ if (url.protocol !== 'coap:' || !url.hostname) {
 }
 
 req = request(url).on('response', function(res) {
-  var dest = process.stdout
 
-  if (res.code === '4.04')
-    return
+  res.pipe(through(function addNewLine(chunk, enc, callback) {
+    if (program.newLine && chunk)
+      chunk = chunk.toString('utf-8') + '\n'
 
-  if (program.newLine)
-    if (program.observe) {
-      dest = through(function (chunk, enc, callback) {
-        this.push(chunk.toString('utf-8') + '\n')
-        callback()
-      })
+    this.push(chunk)
+    callback()
+  })).pipe(process.stdout)
 
-      dest.pipe(process.stdout)
-    }
-    else
-      res.on('end', function() {
-        process.stdout.write('\n')
-      })
-
-  res.pipe(dest)
-
+  // needed because of some weird issue with
+  // empty responses and streams
+  if (!res.payload.length)
+    process.exit(0)
 })
 
 if (method === 'GET' || method === 'DELETE' || program.payload) {
