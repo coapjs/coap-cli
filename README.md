@@ -39,6 +39,7 @@ Usage
 
     -h, --help               output usage information
     -V, --version            output the version number
+    -o, --observe            Observe the given resource
     -n, --no-new-line        No new line at the end of the stream
     -p, --payload <payload>  The payload for POST and PUT requests
 ```

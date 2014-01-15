@@ -4,11 +4,13 @@ var program = require('commander')
   , version = require('./package').version
   , request = require('coap').request
   , URL     = require('url')
+  , through = require('through2')
   , method  = 'GET' // default
   , url
 
 program
   .version(version)
+  .option('-o, --observe', 'Observe the given resource', 'boolean', false)
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .usage('[command] [options] url')
@@ -30,6 +32,7 @@ if (!program.args[0]) {
 
 url = URL.parse(program.args[0])
 url.method = method
+url.observe = program.observe
 
 if (url.protocol !== 'coap:' || !url.hostname) {
   console.log('Wrong URL')
@@ -37,12 +40,27 @@ if (url.protocol !== 'coap:' || !url.hostname) {
 }
 
 req = request(url).on('response', function(res) {
-  res.pipe(process.stdout)
+  var dest = process.stdout
 
-  if (res.code !== '4.04' && program.newLine)
-    res.on('end', function() {
-      process.stdout.write('\n')
-    })
+  if (res.code === '4.04')
+    return
+
+  if (program.newLine)
+    if (program.observe) {
+      dest = through(function (chunk, enc, callback) {
+        this.push(chunk.toString('utf-8') + '\n')
+        callback()
+      })
+
+      dest.pipe(process.stdout)
+    }
+    else
+      res.on('end', function() {
+        process.stdout.write('\n')
+      })
+
+  res.pipe(dest)
+
 })
 
 if (method === 'GET' || method === 'DELETE' || program.payload) {

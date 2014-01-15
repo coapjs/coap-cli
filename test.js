@@ -136,4 +136,48 @@ describe('coap', function() {
       done()
     })
   })
+
+  it('should observe the given resource and emit the values', function(done) {
+    var child = call('-o', 'coap://localhost')
+
+    child.stdout.once('data', function(data) {
+      expect(data.toString()).to.eql('hello\n')
+      child.stdout.once('data', function(data) {
+        expect(data.toString()).to.eql('matteo\n')
+        child.kill();
+        done();
+      })
+    })
+
+    server.once('request', function(req, res) {
+      setTimeout(function() {
+        res.write('hello')
+        setTimeout(function() {
+          res.end('matteo')
+        }, 10)
+      }, 10)
+    })
+  })
+
+  it('should observe the given resource and emit the values without a new line', function(done) {
+    var child = call('-o', '-n', 'coap://localhost')
+
+    child.stdout.once('data', function(data) {
+      expect(data.toString()).to.eql('hello')
+      child.stdout.once('data', function(data) {
+        expect(data.toString()).to.eql('matteo')
+        child.kill();
+        done();
+      })
+    })
+
+    server.once('request', function(req, res) {
+      setTimeout(function() {
+        res.write('hello')
+        setTimeout(function() {
+          res.end('matteo')
+        }, 10)
+      }, 10)
+    })
+  })
 })
