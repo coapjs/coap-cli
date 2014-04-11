@@ -26,14 +26,14 @@ describe('coap', function() {
 
   it('should error with a wrong URL', function(done) {
     call('abcde').stdout.pipe(concat(function(data) {
-      expect(data.toString()).to.eql('Wrong URL\n')
+      expect(data.toString()).to.eql('Wrong URL. Protocol is not coap or no hostname found.\n')
       done()
     }))
   })
 
   it('should GET a given resource by default', function(done) {
     call('coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data.toString()).to.eql('hello world\n')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\thello world\n')
       done()
     }))
 
@@ -44,7 +44,7 @@ describe('coap', function() {
 
   it('should GET a given resource by default (bis)', function(done) {
     call('coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data.toString()).to.eql('hello matteo\n')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\thello matteo\n')
       done()
     }))
 
@@ -55,7 +55,7 @@ describe('coap', function() {
 
   it('should GET not adding a newline (short)', function(done) {
     call('-n', 'coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data.toString()).to.eql('hello matteo')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\thello matteo')
       done()
     }))
 
@@ -71,9 +71,9 @@ describe('coap', function() {
     }))
   })
 
-  it('should should not emit a new line if the response was a 4.04', function(done) {
+  it('should should only emit status code if the response was a 4.04', function(done) {
     call('coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data).to.equal(undefined)
+      expect(data.toString()).to.eql('\x1b[1m(4.04)\x1b[0m\n')
       done()
     }))
 
@@ -85,7 +85,7 @@ describe('coap', function() {
 
   it('should GET a given resource by specifying the verb', function(done) {
     call('get', 'coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data.toString()).to.eql('hello world\n')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\thello world\n')
       done()
     }))
 
@@ -141,11 +141,17 @@ describe('coap', function() {
     var child = call('-o', 'coap://localhost')
 
     child.stdout.once('data', function(data) {
-      expect(data.toString()).to.eql('hello\n')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
       child.stdout.once('data', function(data) {
-        expect(data.toString()).to.eql('matteo\n')
-        child.kill();
-        done();
+        expect(data.toString()).to.eql('hello\n')
+        child.stdout.once('data', function(data) {
+          expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
+          child.stdout.once('data', function(data) {
+            expect(data.toString()).to.eql('matteo\n')
+            child.kill();
+            done();
+          })
+        })
       })
     })
 
@@ -163,11 +169,17 @@ describe('coap', function() {
     var child = call('-o', '-n', 'coap://localhost')
 
     child.stdout.once('data', function(data) {
-      expect(data.toString()).to.eql('hello')
+      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
       child.stdout.once('data', function(data) {
-        expect(data.toString()).to.eql('matteo')
-        child.kill();
-        done();
+        expect(data.toString()).to.eql('hello')
+        child.stdout.once('data', function(data) {
+          expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
+          child.stdout.once('data', function(data) {
+            expect(data.toString()).to.eql('matteo')
+            child.kill();
+            done();
+          })
+        })
       })
     })
 
@@ -183,7 +195,7 @@ describe('coap', function() {
 
   it('should support a 4.04 for an observe', function(done) {
     call('-o', 'coap://localhost').stdout.pipe(concat(function(data) {
-      expect(data).to.equal(undefined)
+      expect(data.toString()).to.eql('\x1b[1m(4.04)\x1b[0m\n')
       done()
     }))
 
