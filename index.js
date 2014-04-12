@@ -13,6 +13,7 @@ program
   .option('-o, --observe', 'Observe the given resource', 'boolean', false)
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
+  .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .usage('[command] [options] url')
 
 
@@ -41,11 +42,12 @@ if (url.protocol !== 'coap:' || !url.hostname) {
 
 req = request(url).on('response', function(res) {
   // print only status code on empty response
-  if (!res.payload.length){
-    process.stdout.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
-  }
+  if (!res.payload.length && !program.quiet)
+    process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
+
   res.pipe(through(function addNewLine(chunk, enc, callback) {
-    process.stdout.write('\x1b[1m(' + res.code + ')\x1b[0m\t')
+    if (!program.quiet)
+      process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\t')
     if (program.newLine && chunk)
       chunk = chunk.toString('utf-8') + '\n'
 
