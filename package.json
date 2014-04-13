@@ -31,7 +31,8 @@
     "pre-commit": "0.0.4",
     "chai": "~1.8.0",
     "mocha": "~1.13.0",
-    "concat-stream": "~1.0.1"
+    "concat-stream": "~1.0.1",
+    "event-stream": "~3.1.1"
   },
   "dependencies": {
     "coap": "~0.5.0",
