@@ -1,8 +1,9 @@
 
-var expect = require('chai').expect
-  , coap   = require('coap')
-  , concat = require('concat-stream')
-  , spawn  = require('child_process').spawn
+var expect  = require('chai').expect
+  , coap    = require('coap')
+  , concat  = require('concat-stream')
+  , spawn   = require('child_process').spawn
+  , replace =  require('event-stream').replace
 
 describe('coap', function() {
   var server
@@ -20,7 +21,13 @@ describe('coap', function() {
 
   function call() {
     var child = spawn('node', ['index.js'].concat(Array.prototype.slice.call(arguments)))
-    //child.stderr.pipe(process.stdout)
+
+    // piping child.stderr to stdout but filtering out the status codes
+    child.stderr
+      .pipe(replace('\x1b[1m(4.04)\x1b[0m\n', ''))
+      .pipe(replace('\x1b[1m(2.05)\x1b[0m\n', ''))
+      .pipe(process.stdout);
+
     return child
   }
 
@@ -29,17 +36,6 @@ describe('coap', function() {
       expect(data.toString()).to.eql('Wrong URL. Protocol is not coap or no hostname found.\n')
       done()
     }))
-  })
-
-  it('quiet option should not print status code', function(done) {
-    call('-q','coap://localhost').stderr.pipe(concat(function(data) {
-      expect(null)
-      done()
-    }))
-
-    server.once('request', function(req, res) {
-      res.end('hello world')
-    })
   })
 
   it('should GET a given resource by default', function(done) {
@@ -95,6 +91,17 @@ describe('coap', function() {
       expect(data.toString()).to.match(/Usage/)
       done()
     }))
+  })
+
+  it('should not print status code on quiet option', function(done) {
+    call('-q','coap://localhost').stderr.pipe(concat(function(data) {
+      expect(null)
+      done()
+    }))
+
+    server.once('request', function(req, res) {
+      res.end('hello world')
+    })
   })
 
   it('should only emit status code if the response was a 4.04', function(done) {
