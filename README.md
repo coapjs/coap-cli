@@ -50,7 +50,7 @@ Usage
 __PUT__ and __POST__ requests body are sent from the standard
 input by default. E.g.
 ```
-echo 'hello world' | coap post coap://localhost/message
+echo -n 'hello world' | coap post coap://localhost/message
 ```
 
 If you want to type it you can end the standard input by pressing
