@@ -2,7 +2,8 @@
 
 var program = require('commander')
   , version = require('./package').version
-  , request = require('coap').request
+  , coap = require('coap')
+  , request = coap.request
   , URL     = require('url')
   , through = require('through2')
   , method  = 'GET' // default
@@ -14,6 +15,7 @@ program
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
+  .option('-h, --headers <headers>', 'Add headers to request')
   .usage('[command] [options] url')
 
 
@@ -62,6 +64,21 @@ req = request(url).on('response', function(res) {
 })
 
 if (method === 'GET' || method === 'DELETE' || program.payload) {
+  if(program.headers){
+    // Parse querystring of headers and send them in mesage
+    var query = {};
+    var a = program.headers.split('&');
+    for (var i in a)
+    {
+      var b = a[i].split('=');
+      query[decodeURIComponent(b[0])] = decodeURIComponent(b[1]);
+      coap.registerOption(decodeURIComponent(b[0]))
+      req.setOption(decodeURIComponent(b[0]), decodeURIComponent(b[1]));
+    }    
+    console.log(query);
+    // coap.registerOption("test")
+    // req.setOption("test", "123");
+  }
   req.end(program.payload)
   return
 }
