@@ -73,17 +73,17 @@ var toString = function(value) {
 
 if (method === 'GET' || method === 'DELETE' || program.payload) {
   if(program.headers){
-    // Parse string of headers looking for skynet uuid/tokens and send them in mesage
+    // Parse string of headers looking for skynet/meshblu uuid/tokens and send them in mesage
     var query = {};
     var a = program.headers.split('&');
     for (var i in a)
     {
       var b = a[i].split('=');
 
-      if (decodeURIComponent(b[0]) == "skynet_auth_uuid"){
+      if (decodeURIComponent(b[0]) == "skynet_auth_uuid" || decodeURIComponent(b[0]) == "meshblu_auth_uuid"){
         req.setOption('98', new Buffer(decodeURIComponent(b[1])));
       } 
-      if (decodeURIComponent(b[0]) == "skynet_auth_token"){
+      if (decodeURIComponent(b[0]) == "skynet_auth_token" || decodeURIComponent(b[0]) == "meshblu_auth_token"){
         req.setOption('99', new Buffer(decodeURIComponent(b[1])));
       } 
     }    
