@@ -43,6 +43,7 @@ Usage
     -n, --no-new-line        No new line at the end of the stream
     -p, --payload <payload>  The payload for POST and PUT requests
     -q, --quiet              Do not print status codes of received packets
+    -c, --non-confirmable    non-confirmable
 ```
 
 ### PUT and POST
