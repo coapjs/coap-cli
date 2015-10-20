@@ -14,6 +14,7 @@ program
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
+  .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .usage('[command] [options] url')
 
 
@@ -34,6 +35,7 @@ if (!program.args[0]) {
 url = URL.parse(program.args[0])
 url.method = method
 url.observe = program.observe
+url.confirmable = !program.nonConfirmable
 
 if (url.protocol !== 'coap:' || !url.hostname) {
   console.log('Wrong URL. Protocol is not coap or no hostname found.')
