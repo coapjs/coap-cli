@@ -86,6 +86,16 @@ describe('coap', function() {
     })
   })
 
+  it('should GET non-confirmable (short)', function(done) {
+    call('-c', 'coap://localhost')
+
+    server.once('request', function(req, res) {
+      res.end('')
+      expect(req._packet.confirmable).to.be.false
+      done()
+    })
+  })
+
   it('should print help if no url', function(done) {
     call().stdout.pipe(concat(function(data) {
       expect(data.toString()).to.match(/Usage/)
