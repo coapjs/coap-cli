@@ -15,6 +15,7 @@ program
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
+  .option('-t, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
   .usage('[command] [options] url')
 
 
@@ -42,7 +43,14 @@ if (url.protocol !== 'coap:' || !url.hostname) {
   process.exit(-1)
 }
 
+var startTime = new Date()
 req = request(url).on('response', function(res) {
+
+  var endTime = new Date();
+  if (program.showTiming) {
+    console.log('Request took ' + (end.getTime() - start.getTime()) + ' ms')
+  }
+
   // print only status code on empty response
   if (!res.payload.length && !program.quiet)
     process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
