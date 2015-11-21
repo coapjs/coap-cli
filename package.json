@@ -32,11 +32,18 @@
     "chai": "~3.4.0",
     "mocha": "~2.3.3",
     "concat-stream": "~1.5.1",
-    "event-stream": "~3.3.2"
+    "event-stream": "~3.3.2",
+    "standard": "^5.3.1"
   },
   "dependencies": {
     "coap": "~0.12.1",
     "commander": "~2.9.0",
     "through2": "~2.0.0"
+  },
+  "standard": {
+    "ignore": [
+      "node_modules/**",
+      "test.js"
+    ]
   }
 }

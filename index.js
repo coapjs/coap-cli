@@ -1,12 +1,12 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
 var program = require('commander')
-  , version = require('./package').version
-  , request = require('coap').request
-  , URL     = require('url')
-  , through = require('through2')
-  , method  = 'GET' // default
-  , url
+var version = require('./package').version
+var request = require('coap').request
+var URL = require('url')
+var through = require('through2')
+var method = 'GET' // default
+var url
 
 program
   .version(version)
@@ -16,14 +16,15 @@ program
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .option('-t, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
-  .usage('[command] [options] url')
+  .usage('[command] [options] url');
 
-
-;['GET', 'PUT', 'POST', 'DELETE'].forEach(function(name) {
+['GET', 'PUT', 'POST', 'DELETE'].forEach(function (name) {
   program
     .command(name.toLowerCase())
     .description('performs a ' + name + ' request')
-    .action(function() { method = name })
+    .action(function () {
+      method = name
+    })
 })
 
 program.parse(process.argv)
@@ -43,37 +44,44 @@ if (url.protocol !== 'coap:' || !url.hostname) {
   process.exit(-1)
 }
 
-var startTime = new Date()
-req = request(url).on('response', function(res) {
+var main = function () {
+  var startTime = new Date()
+  var req = request(url).on('response', function (res) {
+    var endTime = new Date()
+    if (program.showTiming) {
+      console.log('Request took ' + (endTime.getTime() - startTime.getTime()) + ' ms')
+    }
 
-  var endTime = new Date();
-  if (program.showTiming) {
-    console.log('Request took ' + (endTime.getTime() - startTime.getTime()) + ' ms')
+    // print only status code on empty response
+    if (!res.payload.length && !program.quiet) {
+      process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
+    }
+
+    res.pipe(through(function addNewLine (chunk, enc, callback) {
+      if (!program.quiet) {
+        process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\t')
+      }
+      if (program.newLine && chunk) {
+        chunk = chunk.toString('utf-8') + '\n'
+      }
+
+      this.push(chunk)
+      callback()
+    })).pipe(process.stdout)
+
+    // needed because of some weird issue with
+    // empty responses and streams
+    if (!res.payload.length) {
+      process.exit(0)
+    }
+  })
+
+  if (method === 'GET' || method === 'DELETE' || program.payload) {
+    req.end(program.payload)
+    return
   }
 
-  // print only status code on empty response
-  if (!res.payload.length && !program.quiet)
-    process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
-
-  res.pipe(through(function addNewLine(chunk, enc, callback) {
-    if (!program.quiet)
-      process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\t')
-    if (program.newLine && chunk)
-      chunk = chunk.toString('utf-8') + '\n'
-
-    this.push(chunk)
-    callback()
-  })).pipe(process.stdout)
-
-  // needed because of some weird issue with
-  // empty responses and streams
-  if (!res.payload.length)
-    process.exit(0)
-})
-
-if (method === 'GET' || method === 'DELETE' || program.payload) {
-  req.end(program.payload)
-  return
+  process.stdin.pipe(req)
 }
 
-process.stdin.pipe(req)
+main()
