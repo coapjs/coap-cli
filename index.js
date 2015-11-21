@@ -48,7 +48,7 @@ req = request(url).on('response', function(res) {
 
   var endTime = new Date();
   if (program.showTiming) {
-    console.log('Request took ' + (end.getTime() - start.getTime()) + ' ms')
+    console.log('Request took ' + (endTime.getTime() - startTime.getTime()) + ' ms')
   }
 
   // print only status code on empty response
