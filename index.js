@@ -13,6 +13,7 @@ program
   .option('-o, --observe', 'Observe the given resource', 'boolean', false)
   .option('-n, --no-new-line', 'No new line at the end of the stream', 'boolean', true)
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
+  .option('-b, --block2 <option>', 'set the block2 size option', parseInt)
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .usage('[command] [options] url')
@@ -42,7 +43,18 @@ if (url.protocol !== 'coap:' || !url.hostname) {
   process.exit(-1)
 }
 
-req = request(url).on('response', function(res) {
+if (program.block2 && (program.block2 < 1 || program.block2 > 6)) {
+  console.log('Invalid block2 size, valid range [1..6]')
+  console.log('block2 1: 32 bytes payload, block2 2: 64 bytes payload...');
+  process.exit(-1)
+}
+
+req = request(url)
+if (program.block2) {
+  req.setOption('Block2', new Buffer([program.block2]));
+}
+req.on('response', function(res) {
+
   // print only status code on empty response
   if (!res.payload.length && !program.quiet)
     process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
