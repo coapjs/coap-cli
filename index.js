@@ -2,7 +2,8 @@
 
 var program = require('commander')
   , version = require('./package').version
-  , request = require('coap').request
+  , coap    = require('coap')
+  , request = coap.request
   , URL     = require('url')
   , through = require('through2')
   , method  = 'GET' // default
@@ -15,6 +16,7 @@ program
   .option('-p, --payload <payload>', 'The payload for POST and PUT requests')
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
+  .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
   .usage('[command] [options] url')
 
 
@@ -41,6 +43,8 @@ if (url.protocol !== 'coap:' || !url.hostname) {
   console.log('Wrong URL. Protocol is not coap or no hostname found.')
   process.exit(-1)
 }
+
+coap.parameters.exchangeLifetime = program.timeout ? program.timeout : 30;
 
 req = request(url).on('response', function(res) {
   // print only status code on empty response
