@@ -18,6 +18,7 @@ program
   .option('-q, --quiet', 'Do not print status codes of received packets', 'boolean', false)
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
+  .option('-T, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
   .usage('[command] [options] url')
 
 
@@ -53,12 +54,19 @@ if (program.block2 && (program.block2 < 1 || program.block2 > 6)) {
   process.exit(-1)
 }
 
+var startTime = new Date()
 req = request(url)
 if (program.block2) {
   req.setOption('Block2', new Buffer([program.block2]));
 }
 
 req.on('response', function(res) {
+
+  var endTime = new Date();
+  if (program.showTiming) {
+    console.log('Request took ' + (endTime.getTime() - startTime.getTime()) + ' ms')
+  }
+
   // print only status code on empty response
   if (!res.payload.length && !program.quiet)
     process.stderr.write('\x1b[1m(' + res.code + ')\x1b[0m\n')
