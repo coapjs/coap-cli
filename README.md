@@ -48,6 +48,7 @@ Usage
     -c, --non-confirmable    non-confirmable
     -t, --timeout <seconds>  The maximum send time in seconds
     -T, --show-timing        Print request time, handy for simple performance tests
+    -O, --coap-option <key,value> Add COAP-Option to the request (repeatable)
 ```
 
 ### PUT and POST
