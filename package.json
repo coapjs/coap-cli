@@ -30,7 +30,7 @@
   "devDependencies": {
     "chai": "~4.2.0",
     "concat-stream": "~2.0.0",
-    "event-stream": "~3.3.3",
+    "event-stream": "~4.0.1",
     "mocha": "~6.1.4",
     "pre-commit": "1.2.2",
     "standard": "^7.1.2"
