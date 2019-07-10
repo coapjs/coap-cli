@@ -73,7 +73,7 @@ if (program.block2 && (program.block2 < 1 || program.block2 > 6)) {
 var startTime = new Date()
 req = request(url)
 if (program.block2) {
-  req.setOption('Block2', new Buffer([program.block2]))
+  req.setOption('Block2', Buffer.from([program.block2]))
 }
 
 if (typeof program.coapOption !== undefined && program.coapOption.length > 0) {
