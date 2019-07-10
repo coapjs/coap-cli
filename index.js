@@ -36,6 +36,7 @@ program
   .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
   .option('-T, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
   .option('-O, --coap-option <option>', 'Add COAP-Options to the request (repeatable)', collectOptions, [])
+  .option('-A, --ack-timeout <timeout>', 'set acknowledge timeout (has effect on maximum send time)', parseFloat)
   .usage('[command] [options] url')
 
 ;['GET', 'PUT', 'POST', 'DELETE'].forEach(function (name) {
@@ -82,6 +83,15 @@ if (typeof program.coapOption !== 'undefined' && program.coapOption.length > 0) 
     req.setOption(kvPair[0], Buffer.from(kvPair[1]))
   })
 }
+
+var coapTiming = {
+  ackTimeout: 30,
+  ackRandomFactor: 1.0,
+  maxRetransmit: 5,
+  maxLatency: 2,
+  piggybackReplyMs: 10
+}
+coap.updateTiming(coapTiming)
 
 req.on('response', function (res) {
   var endTime = new Date()
