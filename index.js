@@ -84,8 +84,13 @@ if (typeof program.coapOption !== 'undefined' && program.coapOption.length > 0) 
   })
 }
 
+var defaultAckTimeout = 30.0
+if (program.ackTimeout) {
+  defaultAckTimeout = program.ackTimeout
+}
+
 var coapTiming = {
-  ackTimeout: 30,
+  ackTimeout: defaultAckTimeout,
   ackRandomFactor: 1.0,
   maxRetransmit: 5,
   maxLatency: 2,
