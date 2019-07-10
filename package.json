@@ -36,7 +36,7 @@
     "standard": "^7.1.2"
   },
   "dependencies": {
-    "coap": "~0.17.0",
+    "coap": "~0.23.1",
     "commander": "~2.9.0",
     "through2": "~3.0.1"
   }
