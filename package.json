@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "coap": "~0.23.1",
-    "commander": "~2.9.0",
+    "commander": "~2.20.0",
     "through2": "~3.0.1"
   }
 }
