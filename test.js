@@ -93,8 +93,12 @@ describe('coap', function () {
 
     server.once('request', function (req, res) {
       res.end('')
-      expect(req._packet.confirmable).to.be.false
-      done()
+      try {
+        expect(req._packet.confirmable).to.eql(false)
+        done()
+      } catch (err) {
+        done(err)
+      }
     })
   })
 
