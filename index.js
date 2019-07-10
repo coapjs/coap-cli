@@ -76,7 +76,7 @@ if (program.block2) {
   req.setOption('Block2', Buffer.from([program.block2]))
 }
 
-if (typeof program.coapOption !== undefined && program.coapOption.length > 0) {
+if (typeof program.coapOption !== 'undefined' && program.coapOption.length > 0) {
   program.coapOption.forEach(function (singleOption) {
     var kvPair = singleOption.split(coapOptionSeperator, 2)
     req.setOption(kvPair[0], Buffer.from(kvPair[1]))
