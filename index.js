@@ -9,6 +9,21 @@ var through = require('through2')
 var method = 'GET' // default
 var url
 var req
+var coapOptionSeperator = ','
+
+function collectOptions (val, memo) {
+  var coapOptionRegex = new RegExp('\\d{1}\\' + coapOptionSeperator + '\\w+')
+  if (coapOptionRegex.test(val)) {
+    memo.push(val)
+  } else {
+    console.log('Error: Option \'%s\' is invalid.', val)
+    console.log('Please provide options in this way:')
+    console.log('-O [Key]" + coapOptionSeperator + "[Value]')
+    console.log('OR --coap-option [Key]' + coapOptionSeperator + '[Value]')
+    process.exit(-1)
+  }
+  return memo
+}
 
 program
   .version(version)
@@ -20,6 +35,7 @@ program
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
   .option('-T, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
+  .option('-O, --coap-option <option>', 'Add COAP-Options to the request (repeatable)', collectOptions, [])
   .usage('[command] [options] url')
 
 ;['GET', 'PUT', 'POST', 'DELETE'].forEach(function (name) {
@@ -58,6 +74,13 @@ var startTime = new Date()
 req = request(url)
 if (program.block2) {
   req.setOption('Block2', new Buffer([program.block2]))
+}
+
+if (typeof program.coapOption !== undefined && program.coapOption.length > 0) {
+  program.coapOption.forEach(function (singleOption) {
+    var kvPair = singleOption.split(coapOptionSeperator, 2)
+    req.setOption(kvPair[0], Buffer.from(kvPair[1]))
+  })
 }
 
 req.on('response', function (res) {

@@ -38,16 +38,17 @@ Usage
 
   Options:
 
-    -h, --help               output usage information
-    -V, --version            output the version number
-    -o, --observe            Observe the given resource
-    -n, --no-new-line        No new line at the end of the stream
-    -p, --payload <payload>  The payload for POST and PUT requests
-    -b, --block2 <option>    set the block2 size option
-    -q, --quiet              Do not print status codes of received packets
-    -c, --non-confirmable    non-confirmable
-    -t, --timeout <seconds>  The maximum send time in seconds
-    -T, --show-timing        Print request time, handy for simple performance tests
+    -h, --help                    output usage information
+    -V, --version                 output the version number
+    -o, --observe                 Observe the given resource
+    -n, --no-new-line             No new line at the end of the stream
+    -p, --payload <payload>       The payload for POST and PUT requests
+    -b, --block2 <option>         set the block2 size option
+    -q, --quiet                   Do not print status codes of received packets
+    -c, --non-confirmable         non-confirmable
+    -t, --timeout <seconds>       The maximum send time in seconds
+    -T, --show-timing             Print request time, handy for simple performance tests
+    -O, --coap-option <key,value> Add COAP-Option to the request (repeatable)
 ```
 
 ### PUT and POST
