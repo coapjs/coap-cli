@@ -33,8 +33,15 @@ describe('coap', function () {
     return child
   }
 
-  it('should error with a wrong URL', function (done) {
+  it('should error with a invalid URL', function (done) {
     call('abcde').stdout.pipe(concat(function (data) {
+      expect(data.toString()).to.eql('Invalid URL. Protocol is not given or URL is malformed.\n')
+      done()
+    }))
+  })
+
+  it('should error with a wrong URL', function (done) {
+    call('http://abcde').stdout.pipe(concat(function (data) {
       expect(data.toString()).to.eql('Wrong URL. Protocol is not coap or no hostname found.\n')
       done()
     }))

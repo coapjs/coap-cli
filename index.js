@@ -52,7 +52,14 @@ if (!program.args[0]) {
   process.exit(-1)
 }
 
-url = URL.parse(program.args[0])
+try {
+  url = new URL.URL(program.args[0])
+} catch (err) {
+  if (err instanceof TypeError) {
+    console.log('Invalid URL. Protocol is not given or URL is malformed.')
+    process.exit(-1)
+  }
+}
 url.method = method
 url.observe = program.observe
 url.confirmable = !program.nonConfirmable
