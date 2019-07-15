@@ -1,8 +1,8 @@
 CoAP-CLI
 ============================
 
-[![Build
-Status](https://travis-ci.org/avency/coap-cli.png)](https://travis-ci.org/avency/coap-cli)
+[![Build Status](https://travis-ci.org/avency/coap-cli.png)](https://travis-ci.org/avency/coap-cli)
+[![npm version](https://badge.fury.io/js/coap-cli.svg)](https://npmjs.org/package/coap-cli)
 
 __CoAP-CLI__ is a command line interface for CoAP, built on node.js and
 [node-coap](http://github.com/mcollina/node-coap).
