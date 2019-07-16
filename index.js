@@ -53,7 +53,7 @@ if (!program.args[0]) {
 }
 
 try {
-  url = new URL.URL(program.args[0])
+  url = new URL.URL(decodeURIComponent(program.args[0]))
 } catch (err) {
   if (err instanceof TypeError) {
     console.log('Invalid URL. Protocol is not given or URL is malformed.')
