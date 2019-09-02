@@ -18,8 +18,8 @@ function collectOptions (val, memo) {
   } else {
     console.log('Error: Option \'%s\' is invalid.', val)
     console.log('Please provide options in this way:')
-    console.log('-O [Key]" + coapOptionSeperator + "[Value]')
-    console.log('OR --coap-option [Key]' + coapOptionSeperator + '[Value]')
+    console.log('-O 2048,HelloWorld')
+    console.log('OR --coap-option 2048,HelloWorld')
     process.exit(-1)
   }
   return memo
@@ -35,7 +35,7 @@ program
   .option('-c, --non-confirmable', 'non-confirmable', 'boolean', false)
   .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
   .option('-T, --show-timing', 'Print request time, handy for simple performance tests', 'boolean', false)
-  .option('-O, --coap-option <option>', 'Add COAP-Options to the request (repeatable)', collectOptions, [])
+  .option('-O, --coap-option <option>', 'Add COAP-Options to the request, e.q. -O 2048,HelloWorld (repeatable)', collectOptions, [])
   .usage('[command] [options] url')
 
 ;['GET', 'PUT', 'POST', 'DELETE'].forEach(function (name) {
