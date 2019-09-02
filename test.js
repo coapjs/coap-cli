@@ -304,4 +304,56 @@ describe('coap', function () {
       }
     })
   })
+
+  it('should support coap option as hex', function (done) {
+    call('-O 2048,0x61', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expect(req._packet.options.length).to.eql(1)
+        expect(req._packet.options[0].name).to.eql('2048')
+        expect(req._packet.options[0].value.toString()).to.eql('a')
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
+
+  it('should support multiple coap options as hex', function (done) {
+    call('-O 2048,0x61', '-O 2050,0x62', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expect(req._packet.options.length).to.eql(2)
+        expect(req._packet.options[0].name).to.eql('2048')
+        expect(req._packet.options[0].value.toString()).to.eql('a')
+        expect(req._packet.options[1].name).to.eql('2050')
+        expect(req._packet.options[1].value.toString()).to.eql('b')
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
+
+  it('should support multiple coap options as string and hex mixed', function (done) {
+    call('-O 2048,0x61', '-O 2050,FooBarBaz', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expect(req._packet.options.length).to.eql(2)
+        expect(req._packet.options[0].name).to.eql('2048')
+        expect(req._packet.options[0].value.toString()).to.eql('a')
+        expect(req._packet.options[1].name).to.eql('2050')
+        expect(req._packet.options[1].value.toString()).to.eql('FooBarBaz')
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
 })

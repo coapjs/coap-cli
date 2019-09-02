@@ -18,8 +18,8 @@ function collectOptions (val, memo) {
   } else {
     console.log('Error: Option \'%s\' is invalid.', val)
     console.log('Please provide options in this way:')
-    console.log('-O 2048,HelloWorld')
-    console.log('OR --coap-option 2048,HelloWorld')
+    console.log('-O 2048' + coapOptionSeperator + 'HelloWorld')
+    console.log('OR --coap-option 2048' + coapOptionSeperator + 'HelloWorld')
     process.exit(-1)
   }
   return memo
@@ -86,7 +86,8 @@ if (program.block2) {
 if (typeof program.coapOption !== 'undefined' && program.coapOption.length > 0) {
   program.coapOption.forEach(function (singleOption) {
     var kvPair = singleOption.split(coapOptionSeperator, 2)
-    req.setOption(kvPair[0], Buffer.from(kvPair[1]))
+    var optionValueBuffer = kvPair[1].startsWith('0x') ? Buffer.from(kvPair[1].substr(2), 'hex') : Buffer.from(kvPair[1])
+    req.setOption(kvPair[0], optionValueBuffer)
   })
 }
 
