@@ -28,7 +28,7 @@
   "author": "Matteo Collina <hello@matteocollina.com>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~4.2.0",
+    "chai": "~4.3.0",
     "concat-stream": "~2.0.0",
     "event-stream": "~4.0.1",
     "mocha": "~8.2.1",
