@@ -36,7 +36,7 @@
     "standard": "^16.0.1"
   },
   "dependencies": {
-    "coap": "~0.24.0",
+    "coap": "~0.25.0",
     "commander": "~8.1.0",
     "through2": "~4.0.2",
     "minimist": ">=1.2.2"
