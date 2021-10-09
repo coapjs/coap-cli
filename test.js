@@ -1,14 +1,14 @@
 'use strict'
 /* global describe, before, after, it */
 
-var expect = require('chai').expect
-var coap = require('coap')
-var concat = require('concat-stream')
-var spawn = require('child_process').spawn
-var replace = require('event-stream').replace
+const expect = require('chai').expect
+const coap = require('coap')
+const concat = require('concat-stream')
+const spawn = require('child_process').spawn
+const replace = require('event-stream').replace
 
 describe('coap', function () {
-  var server
+  let server
 
   before(function (done) {
     server = coap.createServer()
@@ -22,7 +22,7 @@ describe('coap', function () {
   })
 
   function call () {
-    var child = spawn('node', ['index.js'].concat(Array.prototype.slice.call(arguments)))
+    const child = spawn('node', ['index.js'].concat(Array.prototype.slice.call(arguments)))
 
     // piping child.stderr to stdout but filtering out the status codes
     child.stderr
@@ -48,7 +48,7 @@ describe('coap', function () {
   })
 
   it('should GET a given resource by default', function (done) {
-    var child = call('coap://localhost')
+    const child = call('coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -64,7 +64,7 @@ describe('coap', function () {
   })
 
   it('should GET a given resource by default (bis)', function (done) {
-    var child = call('coap://localhost')
+    const child = call('coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -80,7 +80,7 @@ describe('coap', function () {
   })
 
   it('should GET not adding a newline (short)', function (done) {
-    var child = call('-n', 'coap://localhost')
+    const child = call('-n', 'coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -128,7 +128,7 @@ describe('coap', function () {
   })
 
   it('should only emit status code if the response was a 4.04', function (done) {
-    var child = call('coap://localhost')
+    const child = call('coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(4.04)\x1b[0m\n')
@@ -145,7 +145,7 @@ describe('coap', function () {
   })
 
   it('should GET a given resource by specifying the verb', function (done) {
-    var child = call('get', 'coap://localhost')
+    const child = call('get', 'coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -204,7 +204,7 @@ describe('coap', function () {
   })
 
   it('should observe the given resource and emit the values', function (done) {
-    var child = call('-o', 'coap://localhost')
+    const child = call('-o', 'coap://localhost')
 
     child.stderr.once('data', function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -232,7 +232,7 @@ describe('coap', function () {
   })
 
   it('should observe the given resource and emit the values without a new line', function (done) {
-    var child = call('-o', '-n', 'coap://localhost')
+    const child = call('-o', '-n', 'coap://localhost')
 
     child.stderr.once('data', function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')

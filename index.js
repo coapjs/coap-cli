@@ -1,18 +1,17 @@
 #! /usr/bin/env node
 
-var program = require('commander')
-var version = require('./package').version
-var coap = require('coap')
-var request = coap.request
-var URL = require('url')
-var through = require('through2')
-var method = 'GET' // default
-var url
-var req
-var coapOptionSeperator = ','
+const program = require('commander')
+const version = require('./package').version
+const coap = require('coap')
+const request = coap.request
+const URL = require('url')
+const through = require('through2')
+let method = 'GET' // default
+let url
+const coapOptionSeperator = ','
 
 function collectOptions (val, memo) {
-  var coapOptionRegex = new RegExp('\\d{1}\\' + coapOptionSeperator + '\\w+')
+  const coapOptionRegex = new RegExp('\\d{1}\\' + coapOptionSeperator + '\\w+')
   if (coapOptionRegex.test(val)) {
     memo.push(val)
   } else {
@@ -77,22 +76,22 @@ if (program.block2 && (program.block2 < 1 || program.block2 > 6)) {
   process.exit(-1)
 }
 
-var startTime = new Date()
-req = request(url)
+const startTime = new Date()
+const req = request(url)
 if (program.block2) {
   req.setOption('Block2', Buffer.from([program.block2]))
 }
 
 if (typeof program.coapOption !== 'undefined' && program.coapOption.length > 0) {
   program.coapOption.forEach(function (singleOption) {
-    var kvPair = singleOption.split(coapOptionSeperator, 2)
-    var optionValueBuffer = kvPair[1].startsWith('0x') ? Buffer.from(kvPair[1].substr(2), 'hex') : Buffer.from(kvPair[1])
+    const kvPair = singleOption.split(coapOptionSeperator, 2)
+    const optionValueBuffer = kvPair[1].startsWith('0x') ? Buffer.from(kvPair[1].substr(2), 'hex') : Buffer.from(kvPair[1])
     req.setOption(kvPair[0], optionValueBuffer)
   })
 }
 
 req.on('response', function (res) {
-  var endTime = new Date()
+  const endTime = new Date()
   if (program.showTiming) {
     console.log('Request took ' + (endTime.getTime() - startTime.getTime()) + ' ms')
   }
