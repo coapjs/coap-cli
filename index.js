@@ -68,6 +68,12 @@ if (url.protocol !== 'coap:' || !url.hostname) {
   process.exit(-1)
 }
 
+const hostname = url.hostname
+// Remove brackets from literal IPv6 addresses
+if (hostname.startsWith('[') && hostname.endsWith(']')) {
+  url.hostname = hostname.substring(1, hostname.length - 1)
+}
+
 coap.parameters.exchangeLifetime = program.timeout ? program.timeout : 30
 
 if (program.block2 && (program.block2 < 1 || program.block2 > 6)) {
