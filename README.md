@@ -26,7 +26,7 @@ Usage
 ----------------------------
 
 ```
-  Usage: coap [command] [options] url
+  Usage: coap command [options] url
 
 
   Commands:
