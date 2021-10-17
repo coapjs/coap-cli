@@ -59,11 +59,17 @@ try {
   }
 }
 
+let hostname = url.hostname
+// Remove brackets from literal IPv6 addresses
+if (hostname.startsWith('[') && hostname.endsWith(']')) {
+  hostname = hostname.substring(1, hostname.length - 1)
+}
+
 const requestParams = {
   method,
   observe: program.opts().observe,
   confirmable: !program.opts().nonConfirmable,
-  hostname: url.hostname,
+  hostname,
   pathname: url.pathname,
   protocol: url.protocol,
   port: url.port,
