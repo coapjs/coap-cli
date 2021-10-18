@@ -34,53 +34,21 @@ describe('coap', function () {
   }
 
   it('should error with a invalid URL', function (done) {
-    call('abcde').stdout.pipe(concat(function (data) {
+    call('get', 'abcde').stdout.pipe(concat(function (data) {
       expect(data.toString()).to.eql('Invalid URL. Protocol is not given or URL is malformed.\n')
       done()
     }))
   })
 
   it('should error with a wrong URL', function (done) {
-    call('http://abcde').stdout.pipe(concat(function (data) {
+    call('get', 'http://abcde').stdout.pipe(concat(function (data) {
       expect(data.toString()).to.eql('Wrong URL. Protocol is not coap or no hostname found.\n')
       done()
     }))
   })
 
-  it('should GET a given resource by default', function (done) {
-    const child = call('coap://localhost')
-
-    child.stderr.pipe(concat(function (data) {
-      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
-      child.stdout.pipe(concat(function (data) {
-        expect(data.toString()).to.eql('hello world\n')
-        done()
-      }))
-    }))
-
-    server.once('request', function (req, res) {
-      res.end('hello world')
-    })
-  })
-
-  it('should GET a given resource by default (bis)', function (done) {
-    const child = call('coap://localhost')
-
-    child.stderr.pipe(concat(function (data) {
-      expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
-      child.stdout.pipe(concat(function (data) {
-        expect(data.toString()).to.eql('hello matteo\n')
-        done()
-      }))
-    }))
-
-    server.once('request', function (req, res) {
-      res.end('hello matteo')
-    })
-  })
-
   it('should GET not adding a newline (short)', function (done) {
-    const child = call('-n', 'coap://localhost')
+    const child = call('get', '-n', 'coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -96,7 +64,7 @@ describe('coap', function () {
   })
 
   it('should GET non-confirmable (short)', function (done) {
-    call('-c', 'coap://localhost')
+    call('get', '-c', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
@@ -110,14 +78,14 @@ describe('coap', function () {
   })
 
   it('should print help if no url', function (done) {
-    call().stdout.pipe(concat(function (data) {
-      expect(data.toString()).to.match(/Usage/)
+    call().stderr.pipe(concat(function (data) {
+      expect(data.toString()).to.match(/Commands/)
       done()
     }))
   })
 
   it('should not print status code on quiet option', function (done) {
-    call('-q', 'coap://localhost').stderr.pipe(concat(function (data) {
+    call('get', '-q', 'coap://localhost').stderr.pipe(concat(function (data) {
       expect(null)
       done()
     }))
@@ -128,7 +96,7 @@ describe('coap', function () {
   })
 
   it('should only emit status code if the response was a 4.04', function (done) {
-    const child = call('coap://localhost')
+    const child = call('get', 'coap://localhost')
 
     child.stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(4.04)\x1b[0m\n')
@@ -204,7 +172,7 @@ describe('coap', function () {
   })
 
   it('should observe the given resource and emit the values', function (done) {
-    const child = call('-o', 'coap://localhost')
+    const child = call('get', '-o', 'coap://localhost')
 
     child.stderr.once('data', function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -232,7 +200,7 @@ describe('coap', function () {
   })
 
   it('should observe the given resource and emit the values without a new line', function (done) {
-    const child = call('-o', '-n', 'coap://localhost')
+    const child = call('get', '-o', '-n', 'coap://localhost')
 
     child.stderr.once('data', function (data) {
       expect(data.toString()).to.eql('\x1b[1m(2.05)\x1b[0m\t')
@@ -260,7 +228,7 @@ describe('coap', function () {
   })
 
   it('should support a 4.04 for an observe', function (done) {
-    call('-o', 'coap://localhost').stderr.pipe(concat(function (data) {
+    call('get', '-o', 'coap://localhost').stderr.pipe(concat(function (data) {
       expect(data.toString()).to.eql('\x1b[1m(4.04)\x1b[0m\n')
       done()
     }))
@@ -272,7 +240,7 @@ describe('coap', function () {
   })
 
   it('should support coap option as string', function (done) {
-    call('-O 2048,HelloWorld', 'coap://localhost')
+    call('get', '-O 2048,HelloWorld', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
@@ -288,7 +256,7 @@ describe('coap', function () {
   })
 
   it('should support multiple coap options as string', function (done) {
-    call('-O 2048,HelloWorld', '-O 2050,FooBarBaz', 'coap://localhost')
+    call('get', '-O 2048,HelloWorld', '-O 2050,FooBarBaz', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
@@ -306,7 +274,7 @@ describe('coap', function () {
   })
 
   it('should support coap option as hex', function (done) {
-    call('-O 2048,0x61', 'coap://localhost')
+    call('get', '-O 2048,0x61', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
@@ -322,7 +290,7 @@ describe('coap', function () {
   })
 
   it('should support multiple coap options as hex', function (done) {
-    call('-O 2048,0x61', '-O 2050,0x62', 'coap://localhost')
+    call('get', '-O 2048,0x61', '-O 2050,0x62', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
@@ -340,7 +308,7 @@ describe('coap', function () {
   })
 
   it('should support multiple coap options as string and hex mixed', function (done) {
-    call('-O 2048,0x61', '-O 2050,FooBarBaz', 'coap://localhost')
+    call('get', '-O 2048,0x61', '-O 2050,FooBarBaz', 'coap://localhost')
 
     server.once('request', function (req, res) {
       res.end('')
