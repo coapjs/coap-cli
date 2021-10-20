@@ -4,10 +4,9 @@ const program = require('commander')
 const version = require('./package').version
 const coap = require('coap')
 const request = coap.request
-const URL = require('url')
+const URI = require('uri-js')
 const through = require('through2')
 let method = 'GET' // default
-let url
 const coapOptionSeperator = ','
 
 function collectOptions (val, memo) {
@@ -50,30 +49,22 @@ let inputUrl
 
 program.parse(process.argv)
 
-try {
-  url = new URL.URL(decodeURIComponent(inputUrl))
-} catch (err) {
-  if (err instanceof TypeError) {
-    console.log('Invalid URL. Protocol is not given or URL is malformed.')
-    process.exit(-1)
-  }
-}
+const url = URI.parse(inputUrl)
 
-let hostname = url.hostname
-// Remove brackets from literal IPv6 addresses
-if (hostname.startsWith('[') && hostname.endsWith(']')) {
-  hostname = hostname.substring(1, hostname.length - 1)
+if (url.scheme === undefined || url.host === undefined) {
+  console.log('Invalid URL. Protocol is not given or URL is malformed.')
+  process.exit(-1)
 }
 
 const requestParams = {
   method,
   observe: program.opts().observe,
   confirmable: !program.opts().nonConfirmable,
-  hostname,
-  pathname: url.pathname,
-  protocol: url.protocol,
+  hostname: url.host,
+  pathname: url.path,
+  protocol: url.scheme + ':',
   port: url.port,
-  query: url.search.substring(1)
+  query: url.query
 }
 
 if (requestParams.protocol !== 'coap:' || !requestParams.hostname) {
