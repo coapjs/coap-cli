@@ -38,7 +38,8 @@
   "dependencies": {
     "coap": "~0.25.0",
     "commander": "~8.2.0",
+    "minimist": ">=1.2.2",
     "through2": "~4.0.2",
-    "minimist": ">=1.2.2"
+    "uri-js": "^4.4.1"
   }
 }
