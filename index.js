@@ -127,5 +127,5 @@ req.on('response', function (res) {
 if (method === 'GET' || method === 'DELETE' || program.opts().payload) {
   req.end(program.opts().payload)
 } else {
-  process.stdin.pipe(req)
+  process.stdin.pipe(req.end())
 }
