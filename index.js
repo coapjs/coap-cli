@@ -126,6 +126,8 @@ req.on('response', function (res) {
 
 if (method === 'GET' || method === 'DELETE' || program.opts().payload) {
   req.end(program.opts().payload)
+} else if (!process.stdin.isTTY) {
+  process.stdin.pipe(req)
 } else {
-  process.stdin.pipe(req.end())
+  req.end()
 }
