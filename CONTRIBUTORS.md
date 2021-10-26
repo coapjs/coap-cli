@@ -17,17 +17,17 @@
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/JelmerT>
-            <img src=https://avatars.githubusercontent.com/u/873684?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Jelmer Tiete/>
-            <br />
-            <sub style="font-size:14px"><b>Jelmer Tiete</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/JKRhb>
             <img src=https://avatars.githubusercontent.com/u/12641361?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Jan Romann/>
             <br />
             <sub style="font-size:14px"><b>Jan Romann</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/JelmerT>
+            <img src=https://avatars.githubusercontent.com/u/873684?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Jelmer Tiete/>
+            <br />
+            <sub style="font-size:14px"><b>Jelmer Tiete</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
