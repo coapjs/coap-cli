@@ -88,7 +88,8 @@ if (program.opts().block2) {
 
 if (typeof program.opts().coapOption !== 'undefined' && program.opts().coapOption.length > 0) {
   program.opts().coapOption.forEach(function (singleOption) {
-    const kvPair = singleOption.split(coapOptionSeperator, 2)
+    const i = singleOption.indexOf(coapOptionSeperator)
+    const kvPair = [singleOption.slice(0, i), singleOption.slice(i + 1)]
     const optionValueBuffer = kvPair[1].startsWith('0x') ? Buffer.from(kvPair[1].substr(2), 'hex') : Buffer.from(kvPair[1])
     req.setOption(kvPair[0], optionValueBuffer)
   })

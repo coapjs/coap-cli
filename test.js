@@ -324,4 +324,20 @@ describe('coap', function () {
       }
     })
   })
+
+  it('should support coap option as string that contains commas', function (done) {
+    call('get', '-O 15,sharedKeys=foo,bar,baz', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expect(req._packet.options.length).to.eql(1)
+        expect(req._packet.options[0].name).to.eql('Uri-Query')
+        expect(req._packet.options[0].value.toString()).to.eql('sharedKeys=foo,bar,baz')
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
 })
