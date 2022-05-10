@@ -28,10 +28,10 @@
   "author": "Matteo Collina <hello@matteocollina.com>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~4.3.0",
+    "chai": "^4.3.6",
     "concat-stream": "~2.0.0",
     "event-stream": "~4.0.1",
-    "mocha": "^9.2.0",
+    "mocha": "^9.2.2",
     "pre-commit": "1.2.2",
     "standard": "^16.0.1"
   },
