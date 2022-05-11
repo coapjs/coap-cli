@@ -340,4 +340,24 @@ describe('coap', function () {
       }
     })
   })
+
+  it('should support multiple coap options with the same option number in any order', function (done) {
+    call('get', '-O 15,sharedKeys=foo,bar,baz', '-O 2050,narf', '-O 15,clientKeys=coap,is,life', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expect(req._packet.options.length).to.eql(3)
+        expect(req._packet.options[0].name).to.eql('Uri-Query')
+        expect(req._packet.options[0].value.toString()).to.eql('sharedKeys=foo,bar,baz')
+        expect(req._packet.options[1].name).to.eql('Uri-Query')
+        expect(req._packet.options[1].value.toString()).to.eql('clientKeys=coap,is,life')
+        expect(req._packet.options[2].name).to.eql('2050')
+        expect(req._packet.options[2].value.toString()).to.eql('narf')
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
 })
