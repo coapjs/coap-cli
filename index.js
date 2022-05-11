@@ -98,7 +98,6 @@ if (typeof program.opts().coapOption !== 'undefined' && program.opts().coapOptio
     if (!Object.prototype.hasOwnProperty.call(options, key)) options[key] = []
     options[key].push(valueBuffer)
   })
-  console.log('adding options:', options)
   Object.entries(options).forEach(([key, values]) => {
     req.setOption(key, values)
   })
