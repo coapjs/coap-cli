@@ -7,6 +7,15 @@ const concat = require('concat-stream')
 const spawn = require('child_process').spawn
 const replace = require('event-stream').replace
 
+// verify that the coap-options are exactly as expected
+function expectOptions (req, expectedOptions) {
+  expect(req._packet.options.length).to.eql(expectedOptions.length)
+  expectedOptions.forEach(([key, value], i) => {
+    expect(req._packet.options[i].name).to.eql(key)
+    expect(req._packet.options[i].value.toString()).to.eql(value)
+  })
+}
+
 describe('coap', function () {
   let server
 
@@ -245,9 +254,9 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(1)
-        expect(req._packet.options[0].name).to.eql('2048')
-        expect(req._packet.options[0].value.toString()).to.eql('HelloWorld')
+        expectOptions(req, [
+          ['2048', 'HelloWorld']
+        ])
         done()
       } catch (err) {
         done(err)
@@ -261,11 +270,10 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(2)
-        expect(req._packet.options[0].name).to.eql('2048')
-        expect(req._packet.options[0].value.toString()).to.eql('HelloWorld')
-        expect(req._packet.options[1].name).to.eql('2050')
-        expect(req._packet.options[1].value.toString()).to.eql('FooBarBaz')
+        expectOptions(req, [
+          ['2048', 'HelloWorld'],
+          ['2050', 'FooBarBaz']
+        ])
         done()
       } catch (err) {
         done(err)
@@ -279,9 +287,9 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(1)
-        expect(req._packet.options[0].name).to.eql('2048')
-        expect(req._packet.options[0].value.toString()).to.eql('a')
+        expectOptions(req, [
+          ['2048', 'a']
+        ])
         done()
       } catch (err) {
         done(err)
@@ -295,11 +303,10 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(2)
-        expect(req._packet.options[0].name).to.eql('2048')
-        expect(req._packet.options[0].value.toString()).to.eql('a')
-        expect(req._packet.options[1].name).to.eql('2050')
-        expect(req._packet.options[1].value.toString()).to.eql('b')
+        expectOptions(req, [
+          ['2048', 'a'],
+          ['2050', 'b']
+        ])
         done()
       } catch (err) {
         done(err)
@@ -313,11 +320,10 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(2)
-        expect(req._packet.options[0].name).to.eql('2048')
-        expect(req._packet.options[0].value.toString()).to.eql('a')
-        expect(req._packet.options[1].name).to.eql('2050')
-        expect(req._packet.options[1].value.toString()).to.eql('FooBarBaz')
+        expectOptions(req, [
+          ['2048', 'a'],
+          ['2050', 'FooBarBaz']
+        ])
         done()
       } catch (err) {
         done(err)
@@ -331,9 +337,27 @@ describe('coap', function () {
     server.once('request', function (req, res) {
       res.end('')
       try {
-        expect(req._packet.options.length).to.eql(1)
-        expect(req._packet.options[0].name).to.eql('Uri-Query')
-        expect(req._packet.options[0].value.toString()).to.eql('sharedKeys=foo,bar,baz')
+        expectOptions(req, [
+          ['Uri-Query', 'sharedKeys=foo,bar,baz']
+        ])
+        done()
+      } catch (err) {
+        done(err)
+      }
+    })
+  })
+
+  it('should support multiple coap options with the same option number in any order', function (done) {
+    call('get', '-O 15,sharedKeys=foo,bar,baz', '-O 2050,narf', '-O 15,clientKeys=coap,is,life', 'coap://localhost')
+
+    server.once('request', function (req, res) {
+      res.end('')
+      try {
+        expectOptions(req, [
+          ['Uri-Query', 'sharedKeys=foo,bar,baz'],
+          ['Uri-Query', 'clientKeys=coap,is,life'],
+          ['2050', 'narf']
+        ])
         done()
       } catch (err) {
         done(err)
