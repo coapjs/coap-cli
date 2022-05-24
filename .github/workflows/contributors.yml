@@ -13,7 +13,11 @@ jobs:
 
       - uses: actions/checkout@v2
       
-      - run: git checkout -b contributors
+      - run: |
+          git config --global user.email "Github Contributors"
+          git config --global user.name "contributors@avency.de"
+          git checkout -b contributors
+          git push
       
       - uses: BobAnkh/add-contributors@master
         with:
