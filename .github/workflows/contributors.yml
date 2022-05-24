@@ -13,6 +13,8 @@ jobs:
 
       - uses: actions/checkout@v2
       
+      - run: git checkout -b contributors
+      
       - uses: BobAnkh/add-contributors@master
         with:
           CONTRIBUTOR: '### Contributors'
@@ -24,4 +26,4 @@ jobs:
           COMMIT_MESSAGE: 'docs(README): update contributors'
           AVATAR_SHAPE: 'round'
           PULL_REQUEST: 'main'
-          BRANCH: 'main'
+          BRANCH: 'contributors'
