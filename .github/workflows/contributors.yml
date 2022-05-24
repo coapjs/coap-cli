@@ -24,4 +24,4 @@ jobs:
           COMMIT_MESSAGE: 'docs(README): update contributors'
           AVATAR_SHAPE: 'round'
           PULL_REQUEST: 'main'
-          BRANCH: 'contributors'
+          BRANCH: 'main'
