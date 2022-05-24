@@ -31,22 +31,6 @@
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/neophob>
-            <img src=https://avatars.githubusercontent.com/u/837347?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Michael Vogt/>
-            <br />
-            <sub style="font-size:14px"><b>Michael Vogt</b></sub>
-        </a>
-    </td>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
-        <a href=https://github.com/av-nb>
-            <img src=https://avatars.githubusercontent.com/u/52242055?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=av-nb/>
-            <br />
-            <sub style="font-size:14px"><b>av-nb</b></sub>
-        </a>
-    </td>
-</tr>
-<tr>
-    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
         <a href=https://github.com/BlueBeN82>
             <img src=https://avatars.githubusercontent.com/u/7314837?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Bernd Niehues/>
             <br />
@@ -58,6 +42,22 @@
             <img src=https://avatars.githubusercontent.com/u/8916953?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Jan Christoph Bernack/>
             <br />
             <sub style="font-size:14px"><b>Jan Christoph Bernack</b></sub>
+        </a>
+    </td>
+</tr>
+<tr>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/neophob>
+            <img src=https://avatars.githubusercontent.com/u/837347?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=Michael Vogt/>
+            <br />
+            <sub style="font-size:14px"><b>Michael Vogt</b></sub>
+        </a>
+    </td>
+    <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
+        <a href=https://github.com/av-nb>
+            <img src=https://avatars.githubusercontent.com/u/52242055?v=4 width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px" alt=av-nb/>
+            <br />
+            <sub style="font-size:14px"><b>av-nb</b></sub>
         </a>
     </td>
     <td align="center" style="word-wrap: break-word; width: 150.0; height: 150.0">
