@@ -34,6 +34,8 @@ program
   .option('-t, --timeout <seconds>', 'The maximum send time in seconds')
   .option('-T, --show-timing', 'Print request time, handy for simple performance tests', false)
   .option('-O, --coap-option <option>', 'Add COAP-Options to the request, e.q. -O 2048,HelloWorld (repeatable)', collectOptions, [])
+  .option('-C, --content-format <content-format>', 'Include a Content-Format option in the request')
+  .option('-a, --accept <accept>', 'Include an Accept option in the request')
 
 let inputUrl
 ;['GET', 'PUT', 'POST', 'DELETE'].forEach(function (name) {
@@ -64,7 +66,9 @@ const requestParams = {
   pathname: url.path,
   protocol: url.scheme + ':',
   port: url.port,
-  query: url.query
+  query: url.query,
+  accept: program.opts().accept,
+  contentFormat: program.opts().contentFormat
 }
 
 if (requestParams.protocol !== 'coap:' || !requestParams.hostname) {
