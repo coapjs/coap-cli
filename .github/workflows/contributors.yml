@@ -16,8 +16,8 @@ jobs:
       - run: |
           git config --global user.email "Github Contributors"
           git config --global user.name "contributors@avency.de"
+          git fetch
           git checkout -b contributors
-          git pull origin contributors
           git push --set-upstream origin contributors
 
       - uses: BobAnkh/add-contributors@master
