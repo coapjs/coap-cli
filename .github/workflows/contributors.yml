@@ -6,19 +6,20 @@ on:
 
 jobs:
   add-contributors:
-  
+
     runs-on: ubuntu-latest
-    
+
     steps:
 
       - uses: actions/checkout@v2
-      
+
       - run: |
           git config --global user.email "Github Contributors"
           git config --global user.name "contributors@avency.de"
+          git pull origin main
           git checkout -b contributors
           git push --set-upstream origin contributors
-      
+
       - uses: BobAnkh/add-contributors@master
         with:
           CONTRIBUTOR: '### Contributors'
